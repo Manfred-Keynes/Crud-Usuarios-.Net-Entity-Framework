@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="cursomvcModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="cursomvcEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cstate" EntityType="cursomvcModel.cstate" />
+    <EntitySet Name="user" EntityType="cursomvcModel.user" />
+    <AssociationSet Name="FK_user_cstate" Association="cursomvcModel.FK_user_cstate">
+      <End Role="cstate" EntitySet="cstate" />
+      <End Role="user" EntitySet="user" />
+    </AssociationSet>
+    <EntitySet Name="animal" EntityType="cursomvcModel.animal" />
+    <EntitySet Name="animal_class" EntityType="cursomvcModel.animal_class" />
+    <AssociationSet Name="FK_animal_animal_class" Association="cursomvcModel.FK_animal_animal_class">
+      <End Role="animal_class" EntitySet="animal_class" />
+      <End Role="animal" EntitySet="animal" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="cstate">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user" Relationship="cursomvcModel.FK_user_cstate" FromRole="cstate" ToRole="user" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="idState" Type="Int32" />
+    <Property Name="edad" Type="Int32" />
+    <NavigationProperty Name="cstate" Relationship="cursomvcModel.FK_user_cstate" FromRole="user" ToRole="cstate" />
+  </EntityType>
+  <Association Name="FK_user_cstate">
+    <End Type="cursomvcModel.cstate" Role="cstate" Multiplicity="0..1" />
+    <End Type="cursomvcModel.user" Role="user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cstate">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="user">
+        <PropertyRef Name="idState" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="animal">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="idAnimal_class" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="animal_class" Relationship="cursomvcModel.FK_animal_animal_class" FromRole="animal" ToRole="animal_class" />
+  </EntityType>
+  <EntityType Name="animal_class">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="animal" Relationship="cursomvcModel.FK_animal_animal_class" FromRole="animal_class" ToRole="animal" />
+  </EntityType>
+  <Association Name="FK_animal_animal_class">
+    <End Type="cursomvcModel.animal_class" Role="animal_class" Multiplicity="1" />
+    <End Type="cursomvcModel.animal" Role="animal" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="animal_class">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="animal">
+        <PropertyRef Name="idAnimal_class" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
